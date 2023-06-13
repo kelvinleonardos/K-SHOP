@@ -47,7 +47,7 @@ public class DbController extends DbConnect {
         return produk;
     }
 
-    public static boolean insertData(String nama, long harga, int stok) {
+    public static void insertData(String nama, long harga, int stok) {
         connection();
         query = "INSERT INTO tb_products (name, price, stock) VALUES (?, ?, ?)";
         try {
@@ -57,11 +57,9 @@ public class DbController extends DbConnect {
             preparedStatement.setInt(3, stok);
             preparedStatement.executeUpdate();
             preparedStatement.close();
-            return true;
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 
     public static void updateNama(int id, String nama) {

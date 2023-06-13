@@ -59,6 +59,7 @@ public class App extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        btn_refresh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -327,28 +328,43 @@ public class App extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
+        btn_refresh.setText("Refresh");
+        btn_refresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_refreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap(8, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(70, 70, 70))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 2, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addGap(70, 70, 70))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(btn_refresh)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel8)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addGap(4, 4, 4)
+                .addComponent(btn_refresh)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -389,17 +405,6 @@ public class App extends javax.swing.JFrame {
         in_jumlah.setText("");
         in_nama.requestFocus();
     }
-    
-    public void insertData() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        int row = jTable1.getRowCount();
-        model.addRow(new Object[] {
-            row += 1,
-            in_nama.getText(),
-            in_harga.getText(),
-            in_jumlah.getText()
-        });
-    }
 
     public void insertData(String nama, String harga, String jumlah) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
@@ -412,7 +417,9 @@ public class App extends javax.swing.JFrame {
         });
     }
 
-    public void initTable() {
+    public void updateTable() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
         for (Produk i : DbController.getDatabase()) {
             insertData(i.getNama(), String.valueOf(i.getHarga()), String.valueOf(i.getStok()));
         }
@@ -438,7 +445,8 @@ public class App extends javax.swing.JFrame {
         } else if(in_jumlah.getText().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Stok barang belum di input");
         } else {
-            insertData();
+            DbController.insertData(in_nama.getText(), Integer.parseInt(in_harga.getText()), Integer.parseInt(in_jumlah.getText()));
+            JOptionPane.showMessageDialog(null, "Barang berhasil diinput, refresh tabel!");
             clear();
         }
     }//GEN-LAST:event_btn_tambahActionPerformed
@@ -470,7 +478,7 @@ public class App extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_editActionPerformed
 
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
-        initTable();
+        
     }//GEN-LAST:event_btn_deleteActionPerformed
 
     private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
@@ -488,6 +496,10 @@ public class App extends javax.swing.JFrame {
     private void btn_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_simpanActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_simpanActionPerformed
+
+    private void btn_refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refreshActionPerformed
+        updateTable();
+    }//GEN-LAST:event_btn_refreshActionPerformed
 
     /**
      * @param args the command line arguments
@@ -529,6 +541,7 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JButton btn_delete;
     private javax.swing.JButton btn_edit;
     private javax.swing.JButton btn_hitung;
+    private javax.swing.JButton btn_refresh;
     private javax.swing.JButton btn_simpan;
     private javax.swing.JButton btn_tambah;
     private javax.swing.JTextField in_harga;
