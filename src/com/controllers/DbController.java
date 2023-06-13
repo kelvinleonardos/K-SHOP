@@ -29,24 +29,6 @@ public class DbController extends DbConnect {
         return list_prod;
     }
 
-    public static Produk getProdukByNama(String nama) {
-        Produk produk = null;
-        connection();
-        query = "SELECT * FROM tb_products WHERE name=?";
-        try {
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, nama);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                produk = new Produk(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getLong("price"), resultSet.getInt("stock"));
-            }
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return produk;
-    }
-
     public static void insertData(String nama, long harga, int stok) {
         connection();
         query = "INSERT INTO tb_products (name, price, stock) VALUES (?, ?, ?)";
@@ -62,41 +44,14 @@ public class DbController extends DbConnect {
         }
     }
 
-    public static void updateNama(int id, String nama) {
+    public static void updateProduct(String nama, int harga, int jumlah) {
         connection();
-        query = "UPDATE tb_products SET name=? WHERE id=?";
+        query = "UPDATE tb_products SET price=?, stock=? WHERE name=?";
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, nama);
-            preparedStatement.setInt(2, id);
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void updateHarga(int id, long harga) {
-        connection();
-        query = "UPDATE tb_products SET price=? WHERE id=?";
-        try {
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setLong(1, harga);
-            preparedStatement.setInt(2, id);
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void updateStok(int id, int stok) {
-        connection();
-        query = "UPDATE tb_products SET stock=? WHERE id=?";
-        try {
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setInt(1, stok);
-            preparedStatement.setInt(2, id);
+            preparedStatement.setString(3, nama);
+            preparedStatement.setInt(1, harga);
+            preparedStatement.setInt(2, jumlah);
             preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {

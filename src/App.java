@@ -460,20 +460,27 @@ public class App extends javax.swing.JFrame {
     }//GEN-LAST:event_in_jumlahActionPerformed
 
     private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        int rowSelect = jTable1.getSelectedRow();
-        
-        if (btn_edit.getText() == "Edit") {
-            btn_tambah.setEnabled(false);
-            btn_delete.setEnabled(false);
-            btn_edit.setText("Update");
-            in_nama.setText(model.getValueAt(rowSelect, 1).toString());
-            in_harga.setText(model.getValueAt(rowSelect, 2).toString());
-            in_jumlah.setText(model.getValueAt(rowSelect, 3).toString());
-        } else {
-            btn_tambah.setEnabled(true);
-            btn_delete.setEnabled(true);
-            btn_edit.setText("Edit");
+        try {
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            int rowSelect = jTable1.getSelectedRow();
+
+            if (btn_edit.getText() == "Edit") {
+                in_nama.setText(model.getValueAt(rowSelect, 1).toString());
+                in_harga.setText(model.getValueAt(rowSelect, 2).toString());
+                in_jumlah.setText(model.getValueAt(rowSelect, 3).toString());
+                in_nama.setEnabled(false);
+                btn_tambah.setEnabled(false);
+                btn_delete.setEnabled(false);
+                btn_edit.setText("Update");
+            } else {
+                DbController.updateProduct(in_nama.getText(), Integer.parseInt(in_harga.getText()), Integer.parseInt(in_jumlah.getText()));
+                btn_tambah.setEnabled(true);
+                btn_delete.setEnabled(true);
+                btn_edit.setText("Edit");
+                clear();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Pilih produk sebelum mengedit!");
         }
     }//GEN-LAST:event_btn_editActionPerformed
 
