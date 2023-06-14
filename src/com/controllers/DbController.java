@@ -43,6 +43,21 @@ public class DbController extends DbConnect {
             e.printStackTrace();
         }
     }
+    
+    public static void insertHistory(String total, String tunai, String Kembali) {
+        connection();
+        query = "INSERT INTO tb_products (name, price, stock) VALUES (?, ?, ?)";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, nama);
+            preparedStatement.setLong(2, harga);
+            preparedStatement.setInt(3, stok);
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void updateProduct(String nama, int harga, int jumlah) {
         connection();

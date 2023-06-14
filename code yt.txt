@@ -1,0 +1,39 @@
+public void insertData(String nama, String harga, String jumlah) {
+	DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+	int row = jTable1.getRowCount();
+	model.addRow(new Object[] {
+		row += 1,
+		nama,
+		harga,
+		jumlah
+	});
+}
+
+public void updateTable() {
+	DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+	model.setRowCount(0);
+	for (Produk i : DbController.getDatabase()) {
+		insertData(i.getNama(), String.valueOf(i.getHarga()), String.valueOf(i.getStok()));
+	}
+}
+
+public static ArrayList<Produk> getDatabase() {
+	connection();
+
+	ArrayList<Produk> list_prod = new ArrayList<>();
+
+	try {
+		query = "SELECT name, price, stock FROM tb_products";
+
+		preparedStatement = connection.prepareStatement(query);
+		resultSet = preparedStatement.executeQuery();
+
+		while(resultSet.next()) {
+			list_prod.add(new Produk(resultSet.getString("name"), resultSet.getInt("price"), resultSet.getInt("stock")));
+		}
+		preparedStatement.close();
+	} catch (SQLException e) {
+		e.printStackTrace();
+	}
+	return list_prod;
+}

@@ -447,7 +447,7 @@ public class App extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Stok barang belum di input");
         } else {
             DbController.insertData(in_nama.getText(), Integer.parseInt(in_harga.getText()), Integer.parseInt(in_jumlah.getText()));
-            JOptionPane.showMessageDialog(null, "Barang berhasil diinput, refresh tabel!");
+            JOptionPane.showMessageDialog(null, "Barang berhasil diinput");
             updateTable();
             clear();
         }
