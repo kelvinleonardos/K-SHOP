@@ -388,6 +388,9 @@
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="in_kembaliActionPerformed"/>
               </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_InitCodePost" type="java.lang.String" value="in_kembali.setEnabled(false);"/>
+              </AuxValues>
             </Component>
             <Component class="javax.swing.JTextField" name="in_tunai">
               <Properties>

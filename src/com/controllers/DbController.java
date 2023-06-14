@@ -59,20 +59,16 @@ public class DbController extends DbConnect {
         }
     }
 
-    public static boolean deleteData(String nama) {
+    public static void deleteData(String nama) {
         connection();
         query = "DELETE FROM tb_products WHERE name=?";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, nama);
-            int affectedRowDelete = preparedStatement.executeUpdate();
-            if (affectedRowDelete > 0) {
-                return true;
-            }
+            preparedStatement.executeUpdate();
             preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return false;
     }
 }

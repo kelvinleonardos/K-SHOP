@@ -175,6 +175,7 @@ public class App extends javax.swing.JFrame {
 
         in_kembali.setBackground(new java.awt.Color(51, 51, 51));
         in_kembali.setForeground(new java.awt.Color(255, 255, 255));
+        in_kembali.setEditable(false);
         in_kembali.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 in_kembaliActionPerformed(evt);
@@ -447,6 +448,7 @@ public class App extends javax.swing.JFrame {
         } else {
             DbController.insertData(in_nama.getText(), Integer.parseInt(in_harga.getText()), Integer.parseInt(in_jumlah.getText()));
             JOptionPane.showMessageDialog(null, "Barang berhasil diinput, refresh tabel!");
+            updateTable();
             clear();
         }
     }//GEN-LAST:event_btn_tambahActionPerformed
@@ -468,12 +470,14 @@ public class App extends javax.swing.JFrame {
                 in_nama.setText(model.getValueAt(rowSelect, 1).toString());
                 in_harga.setText(model.getValueAt(rowSelect, 2).toString());
                 in_jumlah.setText(model.getValueAt(rowSelect, 3).toString());
-                in_nama.setEnabled(false);
+                in_nama.setEditable(false);
                 btn_tambah.setEnabled(false);
                 btn_delete.setEnabled(false);
                 btn_edit.setText("Update");
             } else {
                 DbController.updateProduct(in_nama.getText(), Integer.parseInt(in_harga.getText()), Integer.parseInt(in_jumlah.getText()));
+                updateTable();
+                in_nama.setEditable(true);
                 btn_tambah.setEnabled(true);
                 btn_delete.setEnabled(true);
                 btn_edit.setText("Edit");
@@ -485,7 +489,14 @@ public class App extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_editActionPerformed
 
     private void btn_deleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_deleteActionPerformed
-        
+        try {
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            int rowSelect = jTable1.getSelectedRow();
+            DbController.deleteData(model.getValueAt(rowSelect, 1).toString());
+            updateTable();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Pilih produk sebelum menghapus!");
+        }
     }//GEN-LAST:event_btn_deleteActionPerformed
 
     private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
