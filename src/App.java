@@ -19,8 +19,40 @@ public class App extends javax.swing.JFrame {
     /**
      * Creates new form App
      */
+    
+        public void clear() {
+        in_nama.setText("");
+        in_harga.setText("");
+        in_jumlah.setText("");
+        in_nama.requestFocus();
+    }
+
+    public void insertData(String nama, String harga, String jumlah) {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        int row = jTable1.getRowCount();
+        model.addRow(new Object[] {
+                row += 1,
+                nama,
+                harga,
+                jumlah
+        });
+    }
+
+    public void updateTable() {
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        for (Produk i : DbController.getDatabase()) {
+            insertData(i.getNama(), String.valueOf(i.getHarga()), String.valueOf(i.getStok()));
+        }
+    }
+    
     public App() {
         initComponents();
+        try {
+            updateTable();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -59,10 +91,11 @@ public class App extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        btn_refresh = new javax.swing.JButton();
+        btn_beli = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
+        setForeground(java.awt.Color.white);
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
 
@@ -319,6 +352,7 @@ public class App extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Liberation Sans", 1, 24)); // NOI18N
         jLabel8.setText("TABEL BARANG");
 
+        jTable1.setBackground(new java.awt.Color(255, 255, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -329,10 +363,10 @@ public class App extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        btn_refresh.setText("Refresh");
-        btn_refresh.addActionListener(new java.awt.event.ActionListener() {
+        btn_beli.setText("Beli");
+        btn_beli.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_refreshActionPerformed(evt);
+                btn_beliActionPerformed(evt);
             }
         });
 
@@ -353,19 +387,19 @@ public class App extends javax.swing.JFrame {
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap())))
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(btn_refresh)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addComponent(btn_beli)
+                        .addGap(0, 233, Short.MAX_VALUE))))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel8)
-                .addGap(4, 4, 4)
-                .addComponent(btn_refresh)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_beli)
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -398,33 +432,9 @@ public class App extends javax.swing.JFrame {
         );
 
         pack();
+        setResizable(false);
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    public void clear() {
-        in_nama.setText("");
-        in_harga.setText("");
-        in_jumlah.setText("");
-        in_nama.requestFocus();
-    }
-
-    public void insertData(String nama, String harga, String jumlah) {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        int row = jTable1.getRowCount();
-        model.addRow(new Object[] {
-                row += 1,
-                nama,
-                harga,
-                jumlah
-        });
-    }
-
-    public void updateTable() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0);
-        for (Produk i : DbController.getDatabase()) {
-            insertData(i.getNama(), String.valueOf(i.getHarga()), String.valueOf(i.getStok()));
-        }
-    }
 
     private void in_namaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_in_namaActionPerformed
         // TODO add your handling code here:
@@ -435,7 +445,15 @@ public class App extends javax.swing.JFrame {
     }//GEN-LAST:event_in_totalActionPerformed
 
     private void btn_hitungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hitungActionPerformed
-        // TODO add your handling code here:
+        try {
+            int tot = Integer.parseInt(in_total.getText());
+            int tun = Integer.parseInt(in_tunai.getText());
+            int kem = tun-tot;
+            in_kembali.setText(String.valueOf(kem));
+            updateTable();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Pilih produk & masukkan tunai!");
+        }
     }//GEN-LAST:event_btn_hitungActionPerformed
 
     private void btn_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tambahActionPerformed
@@ -515,9 +533,17 @@ public class App extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btn_simpanActionPerformed
 
-    private void btn_refreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_refreshActionPerformed
-        updateTable();
-    }//GEN-LAST:event_btn_refreshActionPerformed
+    private void btn_beliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_beliActionPerformed
+        try {
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            int rowSelect = jTable1.getSelectedRow();
+            in_total.setText(model.getValueAt(rowSelect, 2).toString());
+            in_tunai.requestFocus();
+            updateTable();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Pilih produk sebelum membeli!");
+        }
+    }//GEN-LAST:event_btn_beliActionPerformed
 
     /**
      * @param args the command line arguments
@@ -555,11 +581,11 @@ public class App extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_beli;
     private javax.swing.JButton btn_clear;
     private javax.swing.JButton btn_delete;
     private javax.swing.JButton btn_edit;
     private javax.swing.JButton btn_hitung;
-    private javax.swing.JButton btn_refresh;
     private javax.swing.JButton btn_simpan;
     private javax.swing.JButton btn_tambah;
     private javax.swing.JTextField in_harga;
