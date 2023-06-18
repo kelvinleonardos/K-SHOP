@@ -529,14 +529,23 @@ public class App extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_in_kembaliActionPerformed
 
+    String saved;
+
     private void btn_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_simpanActionPerformed
-        // TODO add your handling code here:
+//        try {
+            DbController.insertHistory(saved, in_kembali.getText());
+            DbController.updateStock(saved);
+            updateTable();
+//        } catch (Exception e) {
+//            JOptionPane.showMessageDialog(null, "Masukkan tunai yang valid & hitung sebelum menyimpan!");
+//        }
     }//GEN-LAST:event_btn_simpanActionPerformed
 
     private void btn_beliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_beliActionPerformed
         try {
             DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
             int rowSelect = jTable1.getSelectedRow();
+            saved = model.getValueAt(rowSelect, 1).toString();
             in_total.setText(model.getValueAt(rowSelect, 2).toString());
             in_tunai.requestFocus();
             updateTable();
