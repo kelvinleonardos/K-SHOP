@@ -31,28 +31,6 @@ public class DbController extends DbConnect {
         return list_prod;
     }
 
-    public static String getElm(String colhead, String name) {
-        connection();
-
-        String elm;
-
-        try {
-            query = "SELECT ? FROM tb_products";
-
-            preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, name);
-            resultSet = preparedStatement.executeQuery();
-
-            while(resultSet.next()) {
-                elm = resultSet.getString(colhead);
-            }
-            preparedStatement.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return elm;
-    }
-
     public static void insertData(String nama, long harga, int stok) {
         connection();
         query = "INSERT INTO tb_products (name, price, stock) VALUES (?, ?, ?)";
@@ -102,13 +80,11 @@ public class DbController extends DbConnect {
 
     public static void updateStock(String nama) {
         connection();
-        query = "UPDATE tb_products SET stock=? WHERE name=?";
+        query = "UPDATE tb_products SET stock=stock - 1 WHERE name=?";
         try {
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(2, nama);
-            preparedStatement.setInt(1, Integer.parseInt(getElm("stock", nama))-1);
+            preparedStatement.setString(1, nama);
             preparedStatement.executeUpdate();
-            preparedStatement.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -1,10 +1,6 @@
 package com.config;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 
 public class DbConnect {
@@ -14,6 +10,7 @@ public class DbConnect {
 
     protected static Connection connection;
     protected static PreparedStatement preparedStatement;
+    protected static Statement statement;
     protected static ResultSet resultSet;
     protected static String query;
 

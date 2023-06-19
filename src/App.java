@@ -42,7 +42,11 @@ public class App extends javax.swing.JFrame {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
         for (Produk i : DbController.getDatabase()) {
-            insertData(i.getNama(), String.valueOf(i.getHarga()), String.valueOf(i.getStok()));
+            if (i.getStok()>0) {
+                insertData(i.getNama(), String.valueOf(i.getHarga()), String.valueOf(i.getStok()));
+            } else {
+                DbController.deleteData(i.getNama());
+            }
         }
     }
     
@@ -532,13 +536,14 @@ public class App extends javax.swing.JFrame {
     String saved;
 
     private void btn_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_simpanActionPerformed
-//        try {
+        try {
             DbController.insertHistory(saved, in_kembali.getText());
             DbController.updateStock(saved);
             updateTable();
-//        } catch (Exception e) {
-//            JOptionPane.showMessageDialog(null, "Masukkan tunai yang valid & hitung sebelum menyimpan!");
-//        }
+            JOptionPane.showMessageDialog(null, "Berhasil menyimpan pembelian");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Masukkan tunai yang valid & hitung sebelum menyimpan!");
+        }
     }//GEN-LAST:event_btn_simpanActionPerformed
 
     private void btn_beliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_beliActionPerformed
